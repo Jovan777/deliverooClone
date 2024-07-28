@@ -6,38 +6,33 @@ import {Colors} from '../constants/Colors';
 import { restaurant } from '@/assets/data/restaurant';
 
 const Restaurants = () => {
-  return (
-    <ScrollView
-        paddingHorizontal
-        showHorizontalScrollIndicator={false}
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-            padding: 15,
-        }}
-        >
-        {restaurants.map((restaurant, index)=>(
-            <Link href={'/details'} key={index} asChild>
-                <TouchableOpacity>
-                    <View style={styles.categoryCard}>
-                        <ImageBackground source={restaurant.img} style={styles.image}>
-                            <View style={styles.categoryBox}>
-                                <Text style={styles.categoryText}>{restaurant.name}</Text>
-                                <Text style={{ color: Colors.green }}>
-                                    {restaurant.rating} {restaurant.ratings}
-                                </Text>
-                                <Text style={{ color: Colors.medium }}>{restaurant.distance}</Text>
-                            </View>
-                        </ImageBackground>
-                    </View>
-                </TouchableOpacity>
-            
-            </Link>
+          padding: 15,
+        }}>
+        {restaurants.map((restaurant, index) => (
+          <Link href={'/details'} key={index} asChild>
+            <TouchableOpacity>
+              <View style={styles.categoryCard}>
+                <Image source={restaurant.img} style={styles.image} />
+                <View style={styles.categoryBox}>
+                  <Text style={styles.categoryText}>{restaurant.name}</Text>
+                  <Text style={{ color: Colors.green }}>
+                    {restaurant.rating} {restaurant.ratings}
+                  </Text>
+                  <Text style={{ color: Colors.medium }}>{restaurant.distance}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </Link>
         ))}
-
-    </ScrollView>
-  )
-}
-
-const styles = StyleSheet.create({
+      </ScrollView>
+    );
+  };
+  const styles = StyleSheet.create({
     categoryCard: {
       width: 300,
       height: 250,

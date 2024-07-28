@@ -16,8 +16,8 @@ const Page = () => {
         <Restaurants />
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
