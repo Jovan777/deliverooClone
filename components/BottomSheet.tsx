@@ -43,7 +43,7 @@ const BottomSheet = forwardRef<Ref>((props, ref) => {
           <TouchableOpacity>
             <View style={styles.item}>
               <Ionicons name="location-outline" size={20} color={Colors.medium} />
-              <Text style={{ flex: 1 }}>Current location</Text>
+              <Text style={{ flex: 1 }}>Select location</Text>
               <Ionicons name="chevron-forward" size={20} color={Colors.primary} />
             </View>
           </TouchableOpacity>
