@@ -73,21 +73,18 @@ const Details = () => {
     }, []);
 
 
-    const renderItem: ListRenderItem<any> = ({item, index})=>(
-        <Link href={'/'} asChild>
-            <TouchableOpacity style={styles.item}>
-                <View style={{flex:1}}>
-                    <Text style={styles.dish}>{item.name}</Text>
-                    <Text style={styles.dishText}>{item.info}</Text>
-                    <Text style={styles.dishText}>${item.price}</Text>
-                </View>
-                <Image source={item.img} style={styles.dishImage}></Image>
-            </TouchableOpacity>
+    const renderItem: ListRenderItem<any> = ({ item, index }) => (
+        <Link href={{ pathname: '/(modal)/dish', params: { id: item.id } }} asChild>
+          <TouchableOpacity style={styles.item}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.dish}>{item.name}</Text>
+              <Text style={styles.dishText}>{item.info}</Text>
+              <Text style={styles.dishText}>${item.price}</Text>
+            </View>
+            <Image source={item.img} style={styles.dishImage} />
+          </TouchableOpacity>
         </Link>
-
-
-
-    )
+    );
 
   return (
     <>
