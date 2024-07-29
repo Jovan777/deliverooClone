@@ -1,16 +1,27 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image, SectionList, ListRenderItem, ScrollView } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import ParallaxScrollView from './../components/ParallaxScrollView'
 import { Link, useNavigation } from 'expo-router'
 import {Colors} from './../constants/Colors'
 import { Ionicons } from '@expo/vector-icons';
 import { restaurant } from '@/assets/data/restaurant'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 
 
 
 const Details = () => {
 
+    const [activeIndex, setActiveIndex] = useState(0)
+
+
+    const opacity = useSharedValue(0);
+    const animatedStyles = useAnimatedStyle(() => ({
+        opacity: opacity.value,
+    }));
+
+    const scrollRef = useRef<ScrollView>(null);
+    const itemsRef = useRef<TouchableOpacity[]>([]);
 
     const DATA = restaurant.food.map((item, index)=>({
         title:item.category,
@@ -18,6 +29,24 @@ const Details = () => {
         index
     }))
     const navigation = useNavigation()
+
+    const selectCategory = (index: number) => {
+        const selected = itemsRef.current[index];
+        setActiveIndex(index);
+    
+        selected.measure((x) => {
+          scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true });
+        });
+      };
+    
+    const onScroll = (event: any) => {
+        const y = event.nativeEvent.contentOffset.y;
+        if (y > 350) {
+          opacity.value = withTiming(1);
+        } else {
+          opacity.value = withTiming(0);
+        }
+    };
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -65,6 +94,7 @@ const Details = () => {
     <ParallaxScrollView 
         backgroundColor={'#fff'} 
         style={{flex: 1}} 
+        onScroll={onScroll}
         parallaxHeaderHeight={250}
         stickyHeaderHeight={100}
         renderBackground={()=>(
@@ -107,6 +137,30 @@ const Details = () => {
 
 
     {/* Sticky Segment */}
+
+    <Animated.View style={[styles.stickySegments, animatedStyles]}>
+        <View style={styles.segmentsShadow}>
+          <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.segmentScrollview}>
+            {restaurant.food.map((item, index) => (
+              <TouchableOpacity
+                ref={(ref) => (itemsRef.current[index] = ref!)}
+                key={index}
+                style={activeIndex === index ? styles.segmentButtonActive : styles.segmentButton}
+                onPress={() => selectCategory(index)}>
+                <Text style={activeIndex === index ? styles.segmentTextActive : styles.segmentText}>{item.category}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </Animated.View>
+
+
+
+
+
+
+
+
 
     </>
   )
@@ -174,7 +228,59 @@ const styles=StyleSheet.create({
         fontSize:15,
         color:Colors.mediumDark,
         paddingVertical:4
-      }
+      },
+      stickySegments: {
+        position: 'absolute',
+        height: 50,
+        left: 0,
+        right: 0,
+        top: 100,
+        backgroundColor: '#fff',
+        overflow: 'hidden',
+        paddingBottom: 4,
+      },
+      segmentsShadow: {
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '100%',
+        height: '100%',
+      },
+      segmentButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 4,
+        borderRadius: 50,
+      },
+      segmentText: {
+        color: Colors.primary,
+        fontSize: 16,
+      },
+      segmentButtonActive: {
+        backgroundColor: Colors.primary,
+        paddingHorizontal: 16,
+        paddingVertical: 4,
+        borderRadius: 50,
+      },
+      segmentTextActive: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+      },
+      segmentScrollview: {
+        paddingHorizontal: 16,
+        alignItems: 'center',
+        gap: 20,
+        paddingBottom: 4,
+      },
+
+      
 
 
 
