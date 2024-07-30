@@ -6,6 +6,7 @@ import {Colors} from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import useBasketStore from '@/store/basketStore';
 
 const Dish = () => {
 
@@ -13,10 +14,10 @@ const Dish = () => {
     const item = getDishById(+id)!;
     const router = useRouter()
 
-    //const {addProduct} = useBasketStore()
+    const {addProduct} = useBasketStore()
 
     const addToCart = () => {
-        //addProduct(item)
+        addProduct(item)
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
         router.back()
     }

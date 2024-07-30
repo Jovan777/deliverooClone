@@ -6,14 +6,15 @@ import {Colors} from './../constants/Colors'
 import { Ionicons } from '@expo/vector-icons';
 import { restaurant } from '@/assets/data/restaurant'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-
-
+import useBasketStore from '@/store/basketStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Details = () => {
 
     const [activeIndex, setActiveIndex] = useState(0)
 
+    const {items, total} = useBasketStore()
 
     const opacity = useSharedValue(0);
     const animatedStyles = useAnimatedStyle(() => ({
@@ -151,7 +152,21 @@ const Details = () => {
         </View>
       </Animated.View>
 
+      {/* Footer section */}
+      {items>0 && (
+        <View style={styles.footer}>
+          <SafeAreaView edges={['bottom']} style={{backgroundColor:"#fff"}}>
+            <Link href="/basket" asChild>
+              <TouchableOpacity style={styles.fullButton}>
+                <Text style={styles.basket}>{items}</Text>
+                <Text style={styles.footerText}>View Basket</Text>
+                <Text style={styles.basketTotal}>${total.toFixed(2)}</Text>
+              </TouchableOpacity>
+            </Link>
+          </SafeAreaView>
 
+        </View>
+      )}
 
 
 
@@ -275,6 +290,49 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         gap: 20,
         paddingBottom: 4,
+      },
+      footer:{
+        position:'absolute',
+        backgroundColor: "#fff", 
+        bottom: 0,
+        left:0,
+        width:"100%",
+        padding:10,
+        elevation:10, 
+        shadowColor:"#000",
+        shadowOffset:{width:0, height:-10},
+        shadowOpacity:0.1,
+        shadowRadius:10,
+        paddingTop:21
+      }, 
+      fullButton:{
+        backgroundColor: Colors.primary,
+        paddingHorizontal:15,
+        borderRadius:9,
+        alignItems: 'center',
+        flexDirection:'row',
+        flex:1,
+        justifyContent:'space-between',
+        height:50
+
+      },
+      footerText:{
+        color:"#fff",
+        fontWeight:"bold",
+        fontSize:18
+
+      }, 
+      basket: {
+        color: '#fff',
+        backgroundColor: '#19AA86',
+        fontWeight: 'bold',
+        padding: 8,
+        borderRadius: 2,
+      },
+      basketTotal: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
       },
 
       
